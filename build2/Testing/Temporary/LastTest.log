@@ -1,0 +1,51 @@
+Start testing: Dec 27 21:41 Central Standard Time
+----------------------------------------------------------
+1/1 Testing: test_tensor
+1/1 Test: test_tensor
+Command: "C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build2/test_tensor.exe"
+Directory: C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build2
+"test_tensor" start time: Dec 27 21:41 Central Standard Time
+Output:
+----------------------------------------------------------
+=== MicroGrad++ Phase 1 Tests ===
+Running shape_basic... PASSED
+Running shape_empty... PASSED
+Running shape_equality... PASSED
+Running tensor_default... PASSED
+Running tensor_shape... PASSED
+Running tensor_fill... PASSED
+Running tensor_zeros... PASSED
+Running tensor_ones... PASSED
+Running tensor_copy... PASSED
+Running tensor_copy_assign... PASSED
+Running tensor_move... PASSED
+Running tensor_move_assign... PASSED
+Running tensor_self_assign... PASSED
+Running tensor_indexing... PASSED
+Running tensor_multidim_access... PASSED
+Running tensor_2d_indexing... PASSED
+Running tensor_iteration... PASSED
+Running tensor_add... PASSED
+Running tensor_sub... PASSED
+Running tensor_mul... PASSED
+Running tensor_div... PASSED
+Running tensor_scalar_add... PASSED
+Running tensor_scalar_mul... PASSED
+Running tensor_chained_ops... PASSED
+Running tensor_sum... PASSED
+Running tensor_mean... PASSED
+Running tensor_from_list... PASSED
+Running tensor_single_element... PASSED
+Running tensor_large... PASSED
+Running tensor_print... PASSED
+
+=== All Phase 1 tests PASSED ===
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"test_tensor" end time: Dec 27 21:41 Central Standard Time
+"test_tensor" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Dec 27 21:41 Central Standard Time

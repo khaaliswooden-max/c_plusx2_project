@@ -1,0 +1,5 @@
+# ninja log v7
+63	5736	7885964706378947	CMakeFiles/test_tensor.dir/tests/test_tensor.cpp.obj	6572543716678dae
+5738	6401	7885964763186920	test_tensor.exe	acb066992cbaaf87
+71	7848	7885964706528511	CMakeFiles/bench_tensor.dir/benchmarks/bench_tensor.cpp.obj	5da65bfe19d4362b
+7849	8107	7885964784237300	bench_tensor.exe	d7c05d3bf75c692b
