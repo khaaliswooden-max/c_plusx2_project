@@ -1,109 +1,195 @@
-# CMakeLists.txt
-# MicroGrad++ - Educational C++ Autodiff Tensor Library
-cmake_minimum_required(VERSION 3.16)
+# CMakeLists.txt - MicroGrad++ Build Configuration
+# Repository: github.com/khaaliswooden-max/c_plusx2_project
 
-project(micrograd-cpp
+cmake_minimum_required(VERSION 3.16)
+project(micrograd_cpp 
     VERSION 0.1.0
-    DESCRIPTION "PhD-level educational C++ autodiff tensor library"
+    DESCRIPTION "Minimal autodiff tensor library for learning C++"
     LANGUAGES CXX
 )
 
-# =============================================================================
-# Build Options
-# =============================================================================
-option(MICROGRAD_BUILD_TESTS "Build test executables" ON)
-option(MICROGRAD_BUILD_BENCHMARKS "Build benchmark executables" ON)
-option(MICROGRAD_ENABLE_SANITIZERS "Enable ASan/UBSan for debug builds" OFF)
-
-# =============================================================================
-# C++ Standard & Compiler Settings
-# =============================================================================
+# ============================================================================
+# Global Settings
+# ============================================================================
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)  # For clangd/IDE support
 
-# =============================================================================
-# Header-Only Library Target
-# =============================================================================
+# Build type default
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Build type" FORCE)
+endif()
+
+# ============================================================================
+# Compiler Warnings (Strict)
+# ============================================================================
+add_library(project_warnings INTERFACE)
+target_compile_options(project_warnings INTERFACE
+    $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:
+        -Wall -Wextra -Wpedantic
+        -Wshadow -Wnon-virtual-dtor -Wold-style-cast
+        -Wcast-align -Wunused -Woverloaded-virtual
+        -Wconversion -Wsign-conversion
+        -Wnull-dereference -Wdouble-promotion
+        -Wformat=2 -Wimplicit-fallthrough
+    >
+    $<$<CXX_COMPILER_ID:GNU>:
+        -Wmisleading-indentation -Wduplicated-cond
+        -Wduplicated-branches -Wlogical-op
+    >
+    $<$<CXX_COMPILER_ID:MSVC>:
+        /W4 /permissive-
+    >
+)
+
+# ============================================================================
+# Sanitizers (Debug builds)
+# ============================================================================
+option(ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" ON)
+
+add_library(project_sanitizers INTERFACE)
+if(ENABLE_SANITIZERS AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_options(project_sanitizers INTERFACE
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:
+            -fsanitize=address,undefined
+            -fno-omit-frame-pointer
+        >
+    )
+    target_link_options(project_sanitizers INTERFACE
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:
+            -fsanitize=address,undefined
+        >
+    )
+endif()
+
+# ============================================================================
+# Main Library (Header-only)
+# ============================================================================
 add_library(micrograd INTERFACE)
-add_library(micrograd::micrograd ALIAS micrograd)
-
 target_include_directories(micrograd INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>
 )
+target_link_libraries(micrograd INTERFACE
+    project_warnings
+)
 
-target_compile_features(micrograd INTERFACE cxx_std_20)
+# ============================================================================
+# Benchmarks
+# ============================================================================
+option(BUILD_BENCHMARKS "Build benchmarks" ON)
 
-# =============================================================================
-# Compiler Warnings (applied to targets linking micrograd)
-# =============================================================================
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(micrograd INTERFACE
-        $<BUILD_INTERFACE:-Wall -Wextra -Wpedantic -Wconversion -Wshadow>
+if(BUILD_BENCHMARKS)
+    # Expression templates benchmark
+    add_executable(bench_expr benchmarks/bench_expr.cpp)
+    target_link_libraries(bench_expr PRIVATE micrograd)
+    target_compile_options(bench_expr PRIVATE
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-O3 -march=native>
+        $<$<CXX_COMPILER_ID:MSVC>:/O2 /arch:AVX2>
     )
-elseif(MSVC)
-    target_compile_options(micrograd INTERFACE
-        $<BUILD_INTERFACE:/W4 /permissive->
+    
+    # SIMD benchmark (Phase 4)
+    add_executable(bench_simd benchmarks/bench_simd.cpp)
+    target_link_libraries(bench_simd PRIVATE micrograd)
+    target_compile_options(bench_simd PRIVATE
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-O3 -march=native -ffast-math>
+        $<$<CXX_COMPILER_ID:MSVC>:/O2 /arch:AVX2 /fp:fast>
     )
-endif()
-
-# =============================================================================
-# Sanitizers (Debug builds only)
-# =============================================================================
-if(MICROGRAD_ENABLE_SANITIZERS AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
-        add_link_options(-fsanitize=address,undefined)
+    
+    # OpenMP support for SIMD benchmark
+    find_package(OpenMP)
+    if(OpenMP_CXX_FOUND)
+        target_link_libraries(bench_simd PRIVATE OpenMP::OpenMP_CXX)
     endif()
 endif()
 
-# =============================================================================
-# Tests
-# =============================================================================
-if(MICROGRAD_BUILD_TESTS)
+# ============================================================================
+# Examples
+# ============================================================================
+option(BUILD_EXAMPLES "Build examples" ON)
+
+if(BUILD_EXAMPLES)
+    add_executable(xor_mlp examples/xor_mlp.cpp)
+    target_link_libraries(xor_mlp PRIVATE micrograd)
+endif()
+
+# ============================================================================
+# Testing
+# ============================================================================
+option(BUILD_TESTING "Build tests" ON)
+
+if(BUILD_TESTING)
     enable_testing()
     
-    # Test: tensor
-    add_executable(test_tensor tests/test_tensor.cpp)
-    target_link_libraries(test_tensor PRIVATE micrograd)
-    add_test(NAME test_tensor COMMAND test_tensor)
+    # Try to find GoogleTest, or fetch it
+    find_package(GTest QUIET)
+    if(NOT GTest_FOUND)
+        include(FetchContent)
+        FetchContent_Declare(
+            googletest
+            GIT_REPOSITORY https://github.com/google/googletest.git
+            GIT_TAG v1.14.0
+        )
+        # Prevent GoogleTest from overriding our compiler/linker options
+        set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+        FetchContent_MakeAvailable(googletest)
+    endif()
     
-    # Test: ops (if exists)
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_ops.cpp")
-        add_executable(test_ops tests/test_ops.cpp)
-        target_link_libraries(test_ops PRIVATE micrograd)
-        add_test(NAME test_ops COMMAND test_ops)
-    endif()
+    # Test executable
+    add_executable(test_tensor
+        tests/test_main.cpp
+        tests/test_tensor.cpp
+        tests/test_shape.cpp
+        tests/test_ops.cpp
+        tests/test_expr.cpp
+        tests/test_autograd.cpp
+        tests/test_simd.cpp
+    )
+    target_link_libraries(test_tensor PRIVATE
+        micrograd
+        project_sanitizers
+        GTest::gtest
+        GTest::gtest_main
+    )
+    
+    # Enable AVX2 for SIMD tests in Release mode
+    target_compile_options(test_tensor PRIVATE
+        $<$<AND:$<CONFIG:Release>,$<CXX_COMPILER_ID:GNU,Clang,AppleClang>>:-mavx2>
+        $<$<AND:$<CONFIG:Release>,$<CXX_COMPILER_ID:MSVC>>:/arch:AVX2>
+    )
+    
+    # Register tests with CTest
+    include(GoogleTest)
+    gtest_discover_tests(test_tensor)
 endif()
 
-# =============================================================================
-# Benchmarks
-# =============================================================================
-if(MICROGRAD_BUILD_BENCHMARKS)
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/benchmarks/bench_tensor.cpp")
-        add_executable(bench_tensor benchmarks/bench_tensor.cpp)
-        target_link_libraries(bench_tensor PRIVATE micrograd)
-    endif()
+# ============================================================================
+# Examples
+# ============================================================================
+option(BUILD_EXAMPLES "Build examples" ON)
+
+if(BUILD_EXAMPLES)
+    add_executable(xor_mlp examples/xor_mlp.cpp)
+    target_link_libraries(xor_mlp PRIVATE micrograd)
 endif()
 
-# =============================================================================
-# Installation
-# =============================================================================
-include(GNUInstallDirs)
-
-install(TARGETS micrograd
-    EXPORT micrograd-targets
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+# ============================================================================
+# Install (for use as subproject)
+# ============================================================================
+install(DIRECTORY src/ DESTINATION include/micrograd
+    FILES_MATCHING PATTERN "*.hpp"
 )
 
-install(DIRECTORY include/micrograd
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-install(EXPORT micrograd-targets
-    FILE micrograd-config.cmake
-    NAMESPACE micrograd::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/micrograd
-)
+# ============================================================================
+# Summary
+# ============================================================================
+message(STATUS "")
+message(STATUS "MicroGrad++ Configuration:")
+message(STATUS "  Version:      ${PROJECT_VERSION}")
+message(STATUS "  Build type:   ${CMAKE_BUILD_TYPE}")
+message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "  Compiler:     ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+message(STATUS "  Sanitizers:   ${ENABLE_SANITIZERS}")
+message(STATUS "  Testing:      ${BUILD_TESTING}")
+message(STATUS "")
