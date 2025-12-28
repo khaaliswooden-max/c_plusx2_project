@@ -1,0 +1,164 @@
+# .github/workflows/ci.yml
+# Continuous Integration for MicroGrad++
+# Zero-budget: Uses GitHub-hosted runners (free for public repos)
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ===========================================================================
+  # Build and Test Matrix
+  # ===========================================================================
+  build:
+    name: ${{ matrix.os }} / ${{ matrix.compiler }} / ${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux GCC
+          - os: ubuntu-latest
+            compiler: gcc
+            cc: gcc-13
+            cxx: g++-13
+            build_type: Debug
+            sanitizers: ON
+            
+          - os: ubuntu-latest
+            compiler: gcc
+            cc: gcc-13
+            cxx: g++-13
+            build_type: Release
+            sanitizers: OFF
+            
+          # Linux Clang
+          - os: ubuntu-latest
+            compiler: clang
+            cc: clang-17
+            cxx: clang++-17
+            build_type: Debug
+            sanitizers: ON
+            
+          # macOS
+          - os: macos-latest
+            compiler: appleclang
+            cc: clang
+            cxx: clang++
+            build_type: Debug
+            sanitizers: ON
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install GCC 13 (Ubuntu)
+        if: matrix.os == 'ubuntu-latest' && matrix.compiler == 'gcc'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+
+      - name: Install Clang 17 (Ubuntu)
+        if: matrix.os == 'ubuntu-latest' && matrix.compiler == 'clang'
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 17
+          sudo apt-get install -y clang-17
+
+      - name: Configure CMake
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DMICROGRAD_ENABLE_SANITIZERS=${{ matrix.sanitizers }} \
+            -DMICROGRAD_ENABLE_TESTS=ON
+
+      - name: Build
+        run: cmake --build build -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure --timeout 120
+
+      - name: Upload compile_commands.json
+        if: matrix.build_type == 'Debug' && matrix.compiler == 'clang'
+        uses: actions/upload-artifact@v4
+        with:
+          name: compile-commands
+          path: build/compile_commands.json
+
+  # ===========================================================================
+  # Memory Check with Valgrind
+  # ===========================================================================
+  valgrind:
+    name: Valgrind Memory Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13 valgrind
+
+      - name: Configure
+        env:
+          CC: gcc-13
+          CXX: g++-13
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DMICROGRAD_ENABLE_SANITIZERS=OFF \
+            -DMICROGRAD_ENABLE_TESTS=ON
+
+      - name: Build
+        run: cmake --build build -j$(nproc)
+
+      - name: Valgrind
+        run: |
+          valgrind --leak-check=full \
+                   --show-leak-kinds=all \
+                   --error-exitcode=1 \
+                   --track-origins=yes \
+                   ./build/tests/test_tensor
+
+  # ===========================================================================
+  # Static Analysis
+  # ===========================================================================
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install clang-tidy
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 17
+          sudo apt-get install -y clang-tidy-17
+
+      - name: Configure
+        env:
+          CC: clang-17
+          CXX: clang++-17
+        run: cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Run clang-tidy
+        run: |
+          clang-tidy-17 -p build \
+            include/micrograd/*.hpp \
+            tests/*.cpp \
+            --warnings-as-errors='*' \
+            || echo "clang-tidy found issues (non-blocking for now)"

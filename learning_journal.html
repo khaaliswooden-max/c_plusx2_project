@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroGrad++ Learning Journal | Zuup Innovation Lab</title>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #eaeaea;
+            --text-muted: #a0a0a0;
+            --success: #00d26a;
+            --warning: #ffc107;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        header {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            border-bottom: 1px solid var(--accent);
+            margin-bottom: 2rem;
+        }
+        
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; }
+        
+        .phase {
+            background: var(--secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--highlight);
+        }
+        
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .phase-title {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .phase-level {
+            background: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .level-undergrad { border: 1px solid #4ade80; color: #4ade80; }
+        .level-grad { border: 1px solid #facc15; color: #facc15; }
+        .level-phd { border: 1px solid #f472b6; color: #f472b6; }
+        
+        h3 { 
+            color: var(--highlight); 
+            margin: 1.5rem 0 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .concept-card {
+            background: var(--accent);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .concept-card h4 {
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .concept-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+        }
+        
+        .code-block code {
+            color: #c9d1d9;
+        }
+        
+        .zuup-mapping {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            border: 1px solid var(--highlight);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+        }
+        
+        .zuup-mapping h4 {
+            color: var(--highlight);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .platform-tag {
+            display: inline-block;
+            background: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin: 0.25rem;
+            border: 1px solid var(--accent);
+        }
+        
+        .platform-aureon { border-color: #3b82f6; color: #3b82f6; }
+        .platform-symbion { border-color: #10b981; color: #10b981; }
+        .platform-veyra { border-color: #8b5cf6; color: #8b5cf6; }
+        .platform-orb { border-color: #f59e0b; color: #f59e0b; }
+        .platform-podx { border-color: #ef4444; color: #ef4444; }
+        .platform-qawm { border-color: #06b6d4; color: #06b6d4; }
+        .platform-civium { border-color: #84cc16; color: #84cc16; }
+        
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        
+        .checklist li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+        
+        .checklist li.done::before {
+            content: '☑';
+            color: var(--success);
+        }
+        
+        .milestone {
+            background: var(--primary);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .milestone-title {
+            color: var(--success);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--accent);
+        }
+        
+        th { 
+            color: var(--highlight);
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            background: var(--accent);
+            border-radius: 10px;
+            height: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, var(--success), var(--highlight));
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--accent);
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            h1 { font-size: 1.8rem; }
+            .phase { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 MicroGrad++ Learning Journal</h1>
+            <p class="subtitle">C++ Autodiff Library: Undergrad → PhD Techniques | Zuup Innovation Lab</p>
+        </header>
+
+        <!-- ================================================================== -->
+        <!-- PHASE 1: FOUNDATIONS -->
+        <!-- ================================================================== -->
+        <section class="phase" id="phase1">
+            <div class="phase-header">
+                <div class="phase-title">
+                    <span>📦</span>
+                    <span>Phase 1: Foundations</span>
+                </div>
+                <span class="phase-level level-undergrad">Undergrad Level</span>
+            </div>
+            
+            <p>Core C++ memory management, resource ownership, and basic abstractions.</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <h3>🎯 What You'll Learn</h3>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>RAII (Resource Acquisition Is Initialization)</h4>
+                    <p>Tie resource lifetime to object lifetime. When a <code>Tensor</code> goes out of scope, its memory is automatically freed via <code>unique_ptr</code> destructor.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Rule of 5</h4>
+                    <p>If you define any of: destructor, copy constructor, copy assignment, move constructor, move assignment — define all five to avoid undefined behavior.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Move Semantics</h4>
+                    <p><code>std::move</code> transfers ownership without copying. Critical for performance when returning large tensors from functions.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Templates & Type Parameters</h4>
+                    <p><code>Tensor&lt;float&gt;</code> and <code>Tensor&lt;double&gt;</code> share logic via templates. Compiler generates specialized code for each type.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Operator Overloading</h4>
+                    <p>Define <code>+</code>, <code>-</code>, <code>*</code>, <code>[]</code> to make tensors feel like native types. Enables <code>a + b</code> syntax.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>STL Containers & Algorithms</h4>
+                    <p><code>std::vector</code> for shapes, <code>std::accumulate</code> for size calculation, <code>std::copy</code> for deep copies.</p>
+                </div>
+            </div>
+
+            <h3>📝 Key Code Patterns</h3>
+            <div class="code-block">
+<code><span style="color:#ff79c6">// RAII: unique_ptr handles memory automatically</span>
+std::unique_ptr&lt;T[]&gt; data_ = std::make_unique&lt;T[]&gt;(size);
+
+<span style="color:#ff79c6">// Move constructor: transfer ownership, no copy</span>
+Tensor(Tensor&& other) noexcept 
+    : shape_(std::move(other.shape_))
+    , data_(std::move(other.data_)) {}
+
+<span style="color:#ff79c6">// Copy-and-swap idiom: exception-safe assignment</span>
+Tensor& operator=(const Tensor& other) {
+    Tensor tmp(other);  <span style="color:#6272a4">// Copy</span>
+    swap(*this, tmp);   <span style="color:#6272a4">// Swap (noexcept)</span>
+    return *this;       <span style="color:#6272a4">// tmp destructor cleans old data</span>
+}</code>
+            </div>
+
+            <div class="milestone">
+                <div class="milestone-title">✓ Phase 1 Milestone</div>
+                <code>Tensor&lt;float&gt; a({2,3}); a.fill(1.0f); auto b = a + a;</code>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">Compiles, runs without leaks (valgrind clean), produces correct values.</p>
+            </div>
+
+            <h3>☑️ Completion Checklist</h3>
+            <ul class="checklist">
+                <li>Implement <code>Shape</code> class with <code>numel()</code> and <code>rank()</code></li>
+                <li>Implement <code>Tensor</code> with Rule of 5</li>
+                <li>Add <code>operator[]</code> for flat access</li>
+                <li>Add <code>at({i, j, k})</code> for multi-dim access</li>
+                <li>Implement element-wise <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
+                <li>Add factory methods: <code>zeros()</code>, <code>ones()</code></li>
+                <li>Pass all unit tests with AddressSanitizer</li>
+            </ul>
+
+            <div class="zuup-mapping">
+                <h4>🔗 Zuup Platform Applications</h4>
+                <table>
+                    <tr>
+                        <th>Technique</th>
+                        <th>Platform</th>
+                        <th>Application</th>
+                    </tr>
+                    <tr>
+                        <td>RAII + unique_ptr</td>
+                        <td><span class="platform-tag platform-symbion">Symbion</span></td>
+                        <td>Firmware memory management for ingestible sensors — no leaks in constrained environment</td>
+                    </tr>
+                    <tr>
+                        <td>Move semantics</td>
+                        <td><span class="platform-tag platform-orb">Orb</span></td>
+                        <td>Efficiently transfer 3D Gaussian Splatting point clouds between pipeline stages</td>
+                    </tr>
+                    <tr>
+                        <td>Rule of 5</td>
+                        <td><span class="platform-tag platform-podx">PodX</span></td>
+                        <td>Robust resource handling in mobile data centers with unpredictable power states</td>
+                    </tr>
+                    <tr>
+                        <td>Operator overloading</td>
+                        <td><span class="platform-tag platform-aureon">Aureon</span></td>
+                        <td>Domain-specific types (e.g., <code>NAICS + NAICS</code> for code aggregation)</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- PHASE 2: EXPRESSION TEMPLATES -->
+        <!-- ================================================================== -->
+        <section class="phase" id="phase2">
+            <div class="phase-header">
+                <div class="phase-title">
+                    <span>⚡</span>
+                    <span>Phase 2: Expression Templates</span>
+                </div>
+                <span class="phase-level level-grad">Graduate Level</span>
+            </div>
+            
+            <p>Eliminate temporary allocations via lazy evaluation and compile-time expression trees.</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <h3>🎯 What You'll Learn</h3>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>CRTP (Curiously Recurring Template Pattern)</h4>
+                    <p>Static polymorphism without virtual dispatch. <code>Expr&lt;Derived&gt;</code> calls into <code>Derived</code> at compile time.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Lazy Evaluation</h4>
+                    <p><code>a + b + c</code> builds an expression tree, evaluated only when assigned to a concrete <code>Tensor</code>. No intermediate allocations.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Template Metaprogramming</h4>
+                    <p>Types encode computation structure. The compiler generates specialized loops for each expression pattern.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>C++20 Concepts</h4>
+                    <p>Constrain templates with readable requirements: <code>requires Indexable&lt;T&gt;</code> instead of cryptic SFINAE.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Copy Elision (RVO/NRVO)</h4>
+                    <p>Compiler eliminates copies when returning objects. Expression templates leverage this for zero-copy chains.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Compiler Explorer (Godbolt)</h4>
+                    <p>Verify your expression templates compile to tight loops — no function calls, no temporaries.</p>
+                </div>
+            </div>
+
+            <h3>📝 Key Code Patterns</h3>
+            <div class="code-block">
+<code><span style="color:#ff79c6">// CRTP base for all expressions</span>
+template&lt;typename Derived&gt;
+struct Expr {
+    <span style="color:#6272a4">// Static polymorphism: calls Derived::operator[]</span>
+    auto operator[](size_t i) const { 
+        return static_cast&lt;const Derived&&gt;(*this)[i]; 
+    }
+};
+
+<span style="color:#ff79c6">// Binary operation expression (lazy)</span>
+template&lt;typename L, typename R, typename Op&gt;
+struct BinaryExpr : Expr&lt;BinaryExpr&lt;L, R, Op&gt;&gt; {
+    const L& lhs;
+    const R& rhs;
+    
+    auto operator[](size_t i) const { 
+        return Op{}(lhs[i], rhs[i]);  <span style="color:#6272a4">// Computed on demand</span>
+    }
+};
+
+<span style="color:#ff79c6">// a + b returns expression, not allocated tensor</span>
+template&lt;typename L, typename R&gt;
+auto operator+(const Expr&lt;L&gt;& l, const Expr&lt;R&gt;& r) {
+    return BinaryExpr&lt;L, R, std::plus&lt;&gt;&gt;{...};
+}</code>
+            </div>
+
+            <div class="milestone">
+                <div class="milestone-title">✓ Phase 2 Milestone</div>
+                <code>Tensor c = a + b + c;</code>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">Check assembly (godbolt.org): should compile to single loop with no intermediate allocations.</p>
+            </div>
+
+            <h3>☑️ Completion Checklist</h3>
+            <ul class="checklist">
+                <li>Implement <code>Expr&lt;Derived&gt;</code> CRTP base</li>
+                <li>Create <code>BinaryExpr</code> for <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
+                <li>Add <code>Tensor(Expr&lt;E&gt;)</code> constructor for materialization</li>
+                <li>Verify no temporaries via <code>-S -O2</code> assembly</li>
+                <li>Implement scalar-tensor ops (<code>tensor * 2.0f</code>)</li>
+                <li>Add unary ops: <code>neg()</code>, <code>abs()</code>, <code>exp()</code></li>
+                <li>Benchmark vs eager ops: measure allocation reduction</li>
+            </ul>
+
+            <div class="zuup-mapping">
+                <h4>🔗 Zuup Platform Applications</h4>
+                <table>
+                    <tr>
+                        <th>Technique</th>
+                        <th>Platform</th>
+                        <th>Application</th>
+                    </tr>
+                    <tr>
+                        <td>Lazy evaluation</td>
+                        <td><span class="platform-tag platform-orb">Orb</span></td>
+                        <td>Deferred 3DGS rendering — build scene graph, evaluate only visible splats</td>
+                    </tr>
+                    <tr>
+                        <td>CRTP</td>
+                        <td><span class="platform-tag platform-veyra">Veyra</span></td>
+                        <td>Static policy dispatch for autonomy decisions without runtime overhead</td>
+                    </tr>
+                    <tr>
+                        <td>Expression trees</td>
+                        <td><span class="platform-tag platform-qawm">QAWM</span></td>
+                        <td>Build probabilistic inference chains, optimize before execution</td>
+                    </tr>
+                    <tr>
+                        <td>Zero-copy ops</td>
+                        <td><span class="platform-tag platform-podx">PodX</span></td>
+                        <td>Minimize memory pressure in RAM-constrained edge deployments</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- PHASE 3: AUTODIFF ENGINE -->
+        <!-- ================================================================== -->
+        <section class="phase" id="phase3">
+            <div class="phase-header">
+                <div class="phase-title">
+                    <span>🔄</span>
+                    <span>Phase 3: Autodiff Engine</span>
+                </div>
+                <span class="phase-level level-phd">PhD Core</span>
+            </div>
+            
+            <p>Reverse-mode automatic differentiation via computational graphs and the chain rule.</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <h3>🎯 What You'll Learn</h3>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>Computational Graphs</h4>
+                    <p>Operations form a DAG. Forward pass computes values; backward pass propagates gradients from output to inputs.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Chain Rule</h4>
+                    <p>∂L/∂x = ∂L/∂y × ∂y/∂x. Each node stores local gradients; backward pass multiplies along paths.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Topological Sort</h4>
+                    <p>Process nodes in reverse dependency order. Ensures all downstream gradients are computed before upstream.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Tape-Based Recording</h4>
+                    <p>Record operations during forward pass. Replay in reverse for backward pass. PyTorch uses this approach.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Gradient Accumulation</h4>
+                    <p>Variables used multiple times accumulate gradients: <code>grad += local_grad</code>, not overwrite.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>std::function & Closures</h4>
+                    <p>Store backward functions that capture operation context. Enables dynamic graph construction.</p>
+                </div>
+            </div>
+
+            <h3>📝 Key Code Patterns</h3>
+            <div class="code-block">
+<code><span style="color:#ff79c6">// Variable: tensor with gradient tracking</span>
+struct Variable {
+    Tensor&lt;float&gt; data;
+    Tensor&lt;float&gt; grad;
+    std::function&lt;void()&gt; backward_fn;
+    std::vector&lt;Variable*&gt; parents;
+    
+    void backward() {
+        <span style="color:#6272a4">// 1. Topological sort from this node</span>
+        auto order = topo_sort(this);
+        
+        <span style="color:#6272a4">// 2. Seed gradient (dL/dL = 1)</span>
+        this->grad.fill(1.0f);
+        
+        <span style="color:#6272a4">// 3. Reverse iterate, call backward_fn</span>
+        for (auto it = order.rbegin(); it != order.rend(); ++it) {
+            if ((*it)->backward_fn) (*it)->backward_fn();
+        }
+    }
+};
+
+<span style="color:#ff79c6">// Multiply with gradient recording</span>
+Variable operator*(Variable& a, Variable& b) {
+    Variable out;
+    out.data = a.data * b.data;  <span style="color:#6272a4">// Forward</span>
+    out.parents = {&a, &b};
+    out.backward_fn = [&]() {    <span style="color:#6272a4">// Backward closure</span>
+        a.grad = a.grad + out.grad * b.data;  <span style="color:#6272a4">// ∂L/∂a</span>
+        b.grad = b.grad + out.grad * a.data;  <span style="color:#6272a4">// ∂L/∂b</span>
+    };
+    return out;
+}</code>
+            </div>
+
+            <div class="milestone">
+                <div class="milestone-title">✓ Phase 3 Milestone</div>
+                <p>Train a 2-layer MLP on XOR dataset using SGD. Gradients match PyTorch to ±1e-5.</p>
+                <div class="code-block">
+<code><span style="color:#6272a4">// XOR: (0,0)→0, (0,1)→1, (1,0)→1, (1,1)→0</span>
+auto loss = mse(mlp.forward(x), y);
+loss.backward();
+optimizer.step();</code>
+                </div>
+            </div>
+
+            <h3>☑️ Completion Checklist</h3>
+            <ul class="checklist">
+                <li>Implement <code>Variable</code> with gradient storage</li>
+                <li>Implement <code>backward_fn</code> closures for +, -, *, /</li>
+                <li>Implement topological sort for DAG</li>
+                <li>Add activation functions: ReLU, Sigmoid, Tanh</li>
+                <li>Implement matmul with gradients</li>
+                <li>Build <code>Linear</code> layer (weights + bias)</li>
+                <li>Implement MSE loss</li>
+                <li>Add SGD optimizer</li>
+                <li>Train on XOR, verify convergence</li>
+                <li>Numerical gradient check vs analytical</li>
+            </ul>
+
+            <div class="zuup-mapping">
+                <h4>🔗 Zuup Platform Applications</h4>
+                <table>
+                    <tr>
+                        <th>Technique</th>
+                        <th>Platform</th>
+                        <th>Application</th>
+                    </tr>
+                    <tr>
+                        <td>Computational graphs</td>
+                        <td><span class="platform-tag platform-veyra">Veyra</span></td>
+                        <td>Policy gradient computation for RL agents, distributed across nodes</td>
+                    </tr>
+                    <tr>
+                        <td>Tape-based autodiff</td>
+                        <td><span class="platform-tag platform-orb">Orb</span></td>
+                        <td>Differentiable rendering — backprop through 3DGS rasterization</td>
+                    </tr>
+                    <tr>
+                        <td>Topological sort</td>
+                        <td><span class="platform-tag platform-aureon">Aureon</span></td>
+                        <td>Dependency ordering for multi-stage procurement workflows</td>
+                    </tr>
+                    <tr>
+                        <td>Gradient accumulation</td>
+                        <td><span class="platform-tag platform-qawm">QAWM</span></td>
+                        <td>Aggregate evidence from multiple archaeological traces</td>
+                    </tr>
+                    <tr>
+                        <td>Closures</td>
+                        <td><span class="platform-tag platform-civium">Civium</span></td>
+                        <td>Capture compliance context for deferred audit verification</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- PHASE 4: PERFORMANCE -->
+        <!-- ================================================================== -->
+        <section class="phase" id="phase4">
+            <div class="phase-header">
+                <div class="phase-title">
+                    <span>🚀</span>
+                    <span>Phase 4: Performance Optimization</span>
+                </div>
+                <span class="phase-level level-grad">Grad + PhD</span>
+            </div>
+            
+            <p>SIMD vectorization, multithreading, custom allocators, and cache optimization.</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <h3>🎯 What You'll Learn</h3>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>SIMD Intrinsics</h4>
+                    <p>Process 8 floats simultaneously with AVX2 (<code>_mm256_*</code>). 4-8x speedup on vectorizable loops.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Cache Locality</h4>
+                    <p>Access memory sequentially. <code>alignas(64)</code> for cache line alignment. Avoid strided access patterns.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Thread Pools</h4>
+                    <p>Amortize thread creation cost. <code>std::jthread</code> for automatic joining. Work-stealing for load balance.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Custom Allocators</h4>
+                    <p>Arena allocators for graph nodes — allocate fast, free all at once. Eliminates fragmentation.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Profiling Tools</h4>
+                    <p><code>perf stat</code>, <code>perf record</code>, <code>cachegrind</code>. Measure before optimizing.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Benchmark Methodology</h4>
+                    <p>Google Benchmark for microbenchmarks. Warm up caches, measure variance, compare against baseline.</p>
+                </div>
+            </div>
+
+            <h3>📝 Key Code Patterns</h3>
+            <div class="code-block">
+<code><span style="color:#ff79c6">// SIMD: AVX2 vectorized addition</span>
+#include &lt;immintrin.h&gt;
+
+void add_avx2(const float* a, const float* b, float* out, size_t n) {
+    size_t i = 0;
+    for (; i + 8 <= n; i += 8) {
+        __m256 va = _mm256_loadu_ps(a + i);
+        __m256 vb = _mm256_loadu_ps(b + i);
+        __m256 vc = _mm256_add_ps(va, vb);
+        _mm256_storeu_ps(out + i, vc);
+    }
+    <span style="color:#6272a4">// Scalar fallback for remainder</span>
+    for (; i < n; ++i) out[i] = a[i] + b[i];
+}
+
+<span style="color:#ff79c6">// Arena allocator for graph nodes</span>
+class Arena {
+    std::vector&lt;std::byte&gt; buffer_;
+    size_t offset_ = 0;
+public:
+    template&lt;typename T, typename... Args&gt;
+    T* alloc(Args&&... args) {
+        void* ptr = buffer_.data() + offset_;
+        offset_ += sizeof(T);
+        return new(ptr) T(std::forward&lt;Args&gt;(args)...);
+    }
+    void reset() { offset_ = 0; }  <span style="color:#6272a4">// Free all at once</span>
+};</code>
+            </div>
+
+            <div class="milestone">
+                <div class="milestone-title">✓ Phase 4 Milestone</div>
+                <p>10x speedup on 1024×1024 matmul vs naive implementation. Benchmark against Eigen.</p>
+            </div>
+
+            <h3>☑️ Completion Checklist</h3>
+            <ul class="checklist">
+                <li>Implement SIMD kernels for +, -, *, / with AVX2</li>
+                <li>Add runtime CPU feature detection</li>
+                <li>Implement scalar fallback for non-AVX systems</li>
+                <li>Create thread pool with work-stealing</li>
+                <li>Parallelize matmul across rows</li>
+                <li>Implement arena allocator for graph nodes</li>
+                <li>Add <code>alignas(64)</code> to tensor storage</li>
+                <li>Benchmark with Google Benchmark</li>
+                <li>Profile with <code>perf</code> and <code>cachegrind</code></li>
+            </ul>
+
+            <div class="zuup-mapping">
+                <h4>🔗 Zuup Platform Applications</h4>
+                <table>
+                    <tr>
+                        <th>Technique</th>
+                        <th>Platform</th>
+                        <th>Application</th>
+                    </tr>
+                    <tr>
+                        <td>SIMD intrinsics</td>
+                        <td><span class="platform-tag platform-orb">Orb</span></td>
+                        <td>Vectorized 3D point transformations, depth buffer operations</td>
+                    </tr>
+                    <tr>
+                        <td>Thread pools</td>
+                        <td><span class="platform-tag platform-aureon">Aureon</span></td>
+                        <td>Parallel opportunity scoring across 10K+ SAM.gov listings</td>
+                    </tr>
+                    <tr>
+                        <td>Arena allocators</td>
+                        <td><span class="platform-tag platform-symbion">Symbion</span></td>
+                        <td>Real-time sensor data buffers with deterministic latency</td>
+                    </tr>
+                    <tr>
+                        <td>Cache optimization</td>
+                        <td><span class="platform-tag platform-podx">PodX</span></td>
+                        <td>Maximize throughput on power-constrained edge CPUs</td>
+                    </tr>
+                    <tr>
+                        <td>Profiling</td>
+                        <td><span class="platform-tag platform-qawm">QAWM</span></td>
+                        <td>Identify bottlenecks in probabilistic inference chains</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- PHASE 5: EXTENSIONS -->
+        <!-- ================================================================== -->
+        <section class="phase" id="phase5">
+            <div class="phase-header">
+                <div class="phase-title">
+                    <span>🔬</span>
+                    <span>Phase 5: Research Extensions</span>
+                </div>
+                <span class="phase-level level-phd">PhD Novel</span>
+            </div>
+            
+            <p>Choose one area for deep specialization. Each is publication-worthy with sufficient depth.</p>
+
+            <h3>Extension Options</h3>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>A. CUDA Backend</h4>
+                    <p>GPU kernels, memory management, kernel fusion. Prerequisite: NVIDIA GPU access.</p>
+                    <p style="margin-top: 0.5rem;"><span class="platform-tag platform-orb">Orb</span> Real-time 3DGS rendering</p>
+                </div>
+                <div class="concept-card">
+                    <h4>B. Sparse Tensors</h4>
+                    <p>CSR/CSC formats, sparse-dense matmul, graph neural networks. CPU-only viable.</p>
+                    <p style="margin-top: 0.5rem;"><span class="platform-tag platform-aureon">Aureon</span> Entity relationship graphs</p>
+                </div>
+                <div class="concept-card">
+                    <h4>C. Quantization</h4>
+                    <p>INT8 inference, calibration, mixed precision. Relevant for edge deployment.</p>
+                    <p style="margin-top: 0.5rem;"><span class="platform-tag platform-podx">PodX</span> Edge inference</p>
+                </div>
+                <div class="concept-card">
+                    <h4>D. Graph Optimization</h4>
+                    <p>Operator fusion, constant folding, dead code elimination. Compiler techniques.</p>
+                    <p style="margin-top: 0.5rem;"><span class="platform-tag platform-veyra">Veyra</span> Optimized policy graphs</p>
+                </div>
+            </div>
+
+            <div class="zuup-mapping">
+                <h4>🔗 Recommended Path by Zuup Focus</h4>
+                <table>
+                    <tr>
+                        <th>If Your Focus Is...</th>
+                        <th>Choose Extension</th>
+                        <th>Rationale</th>
+                    </tr>
+                    <tr>
+                        <td>Orb / World Models</td>
+                        <td>A. CUDA Backend</td>
+                        <td>3DGS requires GPU; differentiable rendering is GPU-bound</td>
+                    </tr>
+                    <tr>
+                        <td>Aureon / QAWM</td>
+                        <td>B. Sparse Tensors</td>
+                        <td>Knowledge graphs, entity relations are naturally sparse</td>
+                    </tr>
+                    <tr>
+                        <td>PodX / Symbion</td>
+                        <td>C. Quantization</td>
+                        <td>Edge deployment requires small, fast models</td>
+                    </tr>
+                    <tr>
+                        <td>Veyra / Civium</td>
+                        <td>D. Graph Optimization</td>
+                        <td>Complex policies benefit from compile-time optimization</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- QUICK REFERENCE -->
+        <!-- ================================================================== -->
+        <section class="phase" id="reference" style="border-left-color: var(--text-muted);">
+            <div class="phase-header">
+                <div class="phase-title">
+                    <span>📚</span>
+                    <span>Quick Reference</span>
+                </div>
+            </div>
+
+            <h3>Build Commands</h3>
+            <div class="code-block">
+<code><span style="color:#6272a4"># Debug with sanitizers</span>
+cmake -B build -DCMAKE_BUILD_TYPE=Debug -DMICROGRAD_ENABLE_SANITIZERS=ON
+cmake --build build -j$(nproc)
+ctest --test-dir build --output-on-failure
+
+<span style="color:#6272a4"># Release optimized</span>
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
+
+<span style="color:#6272a4"># Check assembly (Godbolt locally)</span>
+g++ -std=c++20 -O2 -S -o - include/micrograd/tensor.hpp | less</code>
+            </div>
+
+            <h3>Debugging Tools</h3>
+            <div class="code-block">
+<code><span style="color:#6272a4"># Memory leaks</span>
+valgrind --leak-check=full ./build/tests/test_tensor
+
+<span style="color:#6272a4"># Cache performance</span>
+valgrind --tool=cachegrind ./build/benchmarks/bench_matmul
+
+<span style="color:#6272a4"># CPU profiling</span>
+perf record ./build/benchmarks/bench_matmul
+perf report</code>
+            </div>
+
+            <h3>Key Resources</h3>
+            <ul style="list-style: disc; padding-left: 1.5rem; color: var(--text-muted);">
+                <li><a href="https://en.cppreference.com" style="color: var(--highlight);">cppreference.com</a> — C++ standard reference</li>
+                <li><a href="https://godbolt.org" style="color: var(--highlight);">Compiler Explorer</a> — View generated assembly</li>
+                <li><a href="https://github.com/karpathy/micrograd" style="color: var(--highlight);">micrograd</a> — Python reference implementation</li>
+                <li><a href="https://eigen.tuxfamily.org/dox/" style="color: var(--highlight);">Eigen docs</a> — Expression template patterns</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>MicroGrad++ Learning Journal | Zuup Innovation Lab | Visionblox LLC</p>
+            <p style="margin-top: 0.5rem;">Generated for Cursor + Claude Max workflow optimization</p>
+        </footer>
+    </div>
+
+    <script>
+        // Interactive checklist (persists to localStorage)
+        document.querySelectorAll('.checklist li').forEach((item, idx) => {
+            const key = `micrograd-check-${idx}`;
+            if (localStorage.getItem(key) === 'done') {
+                item.classList.add('done');
+            }
+            item.addEventListener('click', () => {
+                item.classList.toggle('done');
+                localStorage.setItem(key, item.classList.contains('done') ? 'done' : '');
+                updateProgress();
+            });
+        });
+
+        function updateProgress() {
+            document.querySelectorAll('.phase').forEach(phase => {
+                const items = phase.querySelectorAll('.checklist li');
+                const done = phase.querySelectorAll('.checklist li.done');
+                const bar = phase.querySelector('.progress-fill');
+                if (bar && items.length > 0) {
+                    bar.style.width = `${(done.length / items.length) * 100}%`;
+                }
+            });
+        }
+        updateProgress();
+    </script>
+</body>
+</html>

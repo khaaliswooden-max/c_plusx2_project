@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroGrad++ Learning Journey | Zuup Innovation Lab</title>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #eaeaea;
+            --muted: #888;
+            --success: #00d26a;
+            --warning: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--accent);
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--highlight), #ff7b54);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+        
+        .phase {
+            background: var(--secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--highlight);
+        }
+        
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .phase h2 {
+            font-size: 1.5rem;
+            color: var(--highlight);
+        }
+        
+        .level-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .undergrad { background: #2196f3; }
+        .grad { background: #9c27b0; }
+        .phd { background: var(--highlight); }
+        
+        .techniques {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .technique {
+            background: var(--accent);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .technique h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .technique p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .code-block code {
+            color: #c9d1d9;
+        }
+        
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; }
+        .function { color: #d2a8ff; }
+        
+        .zuup-applications {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .zuup-applications h3 {
+            color: var(--warning);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .platform {
+            background: rgba(0,0,0,0.3);
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+        
+        .platform strong {
+            color: var(--highlight);
+        }
+        
+        .checklist {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .checklist li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: var(--muted);
+        }
+        
+        .checklist li.done::before {
+            content: '✓';
+            color: var(--success);
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .summary-table th,
+        .summary-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--accent);
+        }
+        
+        .summary-table th {
+            background: var(--accent);
+            color: var(--highlight);
+        }
+        
+        .nav {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .nav a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.25rem 0;
+        }
+        
+        .nav a:hover {
+            color: var(--highlight);
+        }
+        
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .techniques { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="#phase1">Phase 1: Foundations</a>
+        <a href="#phase2">Phase 2: Expression Templates</a>
+        <a href="#phase3">Phase 3: Autodiff</a>
+        <a href="#phase4">Phase 4: Performance</a>
+        <a href="#phase5">Phase 5: Extensions</a>
+        <a href="#summary">Summary</a>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>MicroGrad++ Learning Journey</h1>
+            <p class="subtitle">C++ Techniques from Undergrad to PhD | Zuup Innovation Lab</p>
+        </header>
+
+        <!-- PHASE 1 -->
+        <section class="phase" id="phase1">
+            <div class="phase-header">
+                <h2>Phase 1: Foundations</h2>
+                <span class="level-badge undergrad">Undergrad Level</span>
+            </div>
+            
+            <p>Build core tensor storage with proper memory management. Master the fundamentals that distinguish C++ from other languages.</p>
+            
+            <div class="techniques">
+                <div class="technique">
+                    <h4>RAII (Resource Acquisition Is Initialization)</h4>
+                    <p>Objects acquire resources in constructor, release in destructor. No manual cleanup needed. <code>std::unique_ptr</code> exemplifies this pattern.</p>
+                </div>
+                <div class="technique">
+                    <h4>Rule of Five</h4>
+                    <p>If you define any of: destructor, copy constructor, copy assignment, move constructor, move assignment—define all five.</p>
+                </div>
+                <div class="technique">
+                    <h4>Move Semantics</h4>
+                    <p>Transfer ownership without copying. <code>std::move</code> casts to rvalue reference, enabling efficient resource transfer.</p>
+                </div>
+                <div class="technique">
+                    <h4>Templates Basics</h4>
+                    <p>Generic programming via <code>template&lt;typename T&gt;</code>. Compiler generates specialized code at compile time.</p>
+                </div>
+                <div class="technique">
+                    <h4>Operator Overloading</h4>
+                    <p>Define custom behavior for <code>+, -, *, [], ()</code>. Makes tensors feel like built-in numeric types.</p>
+                </div>
+                <div class="technique">
+                    <h4>CMake Build System</h4>
+                    <p>Cross-platform build configuration. Handles dependencies, compiler flags, and test discovery.</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<code><span class="comment">// Rule of Five in action</span>
+<span class="keyword">class</span> <span class="type">Tensor</span> {
+    <span class="type">std::unique_ptr</span>&lt;<span class="type">float</span>[]&gt; data_;
+    
+<span class="keyword">public</span>:
+    <span class="function">Tensor</span>(<span class="keyword">const</span> <span class="type">Tensor</span>&amp; other);           <span class="comment">// Copy ctor: deep copy</span>
+    <span class="function">Tensor</span>(<span class="type">Tensor</span>&amp;&amp; other) <span class="keyword">noexcept</span>;       <span class="comment">// Move ctor: steal pointer</span>
+    <span class="type">Tensor</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="type">Tensor</span>&amp;);     <span class="comment">// Copy assign</span>
+    <span class="type">Tensor</span>&amp; <span class="keyword">operator</span>=(<span class="type">Tensor</span>&amp;&amp;) <span class="keyword">noexcept</span>; <span class="comment">// Move assign</span>
+    ~<span class="function">Tensor</span>() = <span class="keyword">default</span>;                  <span class="comment">// unique_ptr handles it</span>
+};</code>
+            </div>
+            
+            <div class="zuup-applications">
+                <h3>🚀 Zuup/Visionblox Applications</h3>
+                <div class="platform-grid">
+                    <div class="platform">
+                        <strong>Aureon™</strong><br>
+                        RAII for database connections. Move semantics for embedding vectors during procurement matching.
+                    </div>
+                    <div class="platform">
+                        <strong>Symbion™</strong><br>
+                        Zero-copy tensor views for real-time biosignal streaming. Template-based sensor data abstraction.
+                    </div>
+                    <div class="platform">
+                        <strong>PodX™</strong><br>
+                        RAII for resource-constrained edge compute. Move semantics to minimize memory pressure in DDIL.
+                    </div>
+                    <div class="platform">
+                        <strong>Orb™</strong><br>
+                        Operator overloading for 3D point/vector math. Template tensors for different precision levels.
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="checklist">
+                <li>Tensor class with shape and strides</li>
+                <li>Element-wise operations (+, -, *, /)</li>
+                <li>Copy/move constructors verified</li>
+                <li>Unit tests passing with Google Test</li>
+                <li>Memory safety verified with AddressSanitizer</li>
+            </ul>
+        </section>
+
+        <!-- PHASE 2 -->
+        <section class="phase" id="phase2">
+            <div class="phase-header">
+                <h2>Phase 2: Expression Templates</h2>
+                <span class="level-badge grad">Graduate Level</span>
+            </div>
+            
+            <p>Eliminate temporary allocations via lazy evaluation. The compiler generates optimal fused loops from high-level expressions.</p>
+            
+            <div class="techniques">
+                <div class="technique">
+                    <h4>CRTP (Curiously Recurring Template Pattern)</h4>
+                    <p>Static polymorphism: <code>class Derived : public Base&lt;Derived&gt;</code>. No vtable overhead, enables compile-time dispatch.</p>
+                </div>
+                <div class="technique">
+                    <h4>Expression Templates</h4>
+                    <p>Build AST at compile time, evaluate lazily. <code>a + b + c</code> becomes single loop, zero intermediates.</p>
+                </div>
+                <div class="technique">
+                    <h4>SFINAE / C++20 Concepts</h4>
+                    <p>Substitution Failure Is Not An Error. Constrain templates at compile time. Concepts make constraints readable.</p>
+                </div>
+                <div class="technique">
+                    <h4>Perfect Forwarding</h4>
+                    <p><code>std::forward&lt;T&gt;(arg)</code> preserves value category. Essential for generic wrappers.</p>
+                </div>
+                <div class="technique">
+                    <h4>constexpr / consteval</h4>
+                    <p>Compile-time computation. <code>constexpr</code> can run at compile or runtime; <code>consteval</code> must be compile-time.</p>
+                </div>
+                <div class="technique">
+                    <h4>Copy Elision (RVO/NRVO)</h4>
+                    <p>Compiler eliminates copies in return statements. Guaranteed in C++17 for certain cases.</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<code><span class="comment">// CRTP base for expression templates</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">Derived</span>&gt;
+<span class="keyword">struct</span> <span class="type">Expr</span> {
+    <span class="keyword">const</span> <span class="type">Derived</span>&amp; <span class="function">self</span>() <span class="keyword">const</span> { 
+        <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="type">Derived</span>&amp;&gt;(*<span class="keyword">this</span>); 
+    }
+    <span class="keyword">auto</span> <span class="keyword">operator</span>[](<span class="type">size_t</span> i) <span class="keyword">const</span> { <span class="keyword">return</span> <span class="function">self</span>()[i]; }
+};
+
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">L</span>, <span class="keyword">typename</span> <span class="type">R</span>&gt;
+<span class="keyword">struct</span> <span class="type">AddExpr</span> : <span class="type">Expr</span>&lt;<span class="type">AddExpr</span>&lt;<span class="type">L</span>,<span class="type">R</span>&gt;&gt; {
+    <span class="keyword">const</span> <span class="type">L</span>&amp; lhs; <span class="keyword">const</span> <span class="type">R</span>&amp; rhs;
+    <span class="keyword">auto</span> <span class="keyword">operator</span>[](<span class="type">size_t</span> i) <span class="keyword">const</span> { <span class="keyword">return</span> lhs[i] + rhs[i]; }
+};
+
+<span class="comment">// a + b + c → AddExpr&lt;AddExpr&lt;Tensor, Tensor&gt;, Tensor&gt;</span>
+<span class="comment">// Single loop when assigned to result tensor!</span></code>
+            </div>
+            
+            <div class="zuup-applications">
+                <h3>🚀 Zuup/Visionblox Applications</h3>
+                <div class="platform-grid">
+                    <div class="platform">
+                        <strong>Orb™</strong><br>
+                        Expression templates for 3DGS parameter updates. Fused gradient accumulation without temporaries.
+                    </div>
+                    <div class="platform">
+                        <strong>Veyra™</strong><br>
+                        Lazy evaluation for policy gradient computation. CRTP for type-safe action/state abstractions.
+                    </div>
+                    <div class="platform">
+                        <strong>QAWM™</strong><br>
+                        Expression templates for Bayesian posterior updates. Compile-time probability distribution composition.
+                    </div>
+                    <div class="platform">
+                        <strong>Civium™</strong><br>
+                        Concepts for compliance rule type constraints. SFINAE for jurisdiction-specific policy dispatch.
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="checklist">
+                <li>CRTP Expr base class implemented</li>
+                <li>AddExpr, MulExpr, etc. expression types</li>
+                <li>Verify no intermediate allocations (check assembly)</li>
+                <li>Benchmark: expression templates vs naive 3x faster</li>
+            </ul>
+        </section>
+
+        <!-- PHASE 3 -->
+        <section class="phase" id="phase3">
+            <div class="phase-header">
+                <h2>Phase 3: Autodiff Engine</h2>
+                <span class="level-badge phd">PhD Level (Core)</span>
+            </div>
+            
+            <p>Implement reverse-mode automatic differentiation. This is the core of all modern deep learning frameworks.</p>
+            
+            <div class="techniques">
+                <div class="technique">
+                    <h4>Computational Graphs</h4>
+                    <p>DAG of operations. Each node stores forward value, backward function, and parent pointers for gradient flow.</p>
+                </div>
+                <div class="technique">
+                    <h4>Reverse-Mode AD (Backpropagation)</h4>
+                    <p>Forward pass builds graph, backward pass computes gradients via chain rule in reverse topological order.</p>
+                </div>
+                <div class="technique">
+                    <h4>Topological Sort</h4>
+                    <p>Order nodes so each node appears after its dependencies. Essential for correct gradient propagation.</p>
+                </div>
+                <div class="technique">
+                    <h4>std::function & Lambda Captures</h4>
+                    <p>Store arbitrary callables for backward functions. Captures enable closures over local state.</p>
+                </div>
+                <div class="technique">
+                    <h4>Gradient Accumulation</h4>
+                    <p>When a variable feeds multiple operations, gradients must be summed (multivariate chain rule).</p>
+                </div>
+                <div class="technique">
+                    <h4>Memory Management for Graphs</h4>
+                    <p>Arena allocators, reference counting, or tape-based approaches for efficient graph node allocation.</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<code><span class="keyword">struct</span> <span class="type">Variable</span> {
+    <span class="type">Tensor</span>&lt;<span class="type">float</span>&gt; data;
+    <span class="type">Tensor</span>&lt;<span class="type">float</span>&gt; grad;
+    <span class="type">std::function</span>&lt;<span class="keyword">void</span>()&gt; backward_fn;
+    <span class="type">std::vector</span>&lt;<span class="type">Variable</span>*&gt; parents;
+    
+    <span class="keyword">void</span> <span class="function">backward</span>() {
+        <span class="comment">// Topological sort</span>
+        <span class="type">std::vector</span>&lt;<span class="type">Variable</span>*&gt; topo;
+        <span class="type">std::set</span>&lt;<span class="type">Variable</span>*&gt; visited;
+        <span class="function">build_topo</span>(<span class="keyword">this</span>, topo, visited);
+        
+        grad.<span class="function">ones</span>();  <span class="comment">// dL/dL = 1</span>
+        <span class="keyword">for</span> (<span class="keyword">auto</span> it = topo.<span class="function">rbegin</span>(); it != topo.<span class="function">rend</span>(); ++it) {
+            <span class="keyword">if</span> ((*it)-&gt;backward_fn) (*it)-&gt;<span class="function">backward_fn</span>();
+        }
+    }
+};</code>
+            </div>
+            
+            <div class="zuup-applications">
+                <h3>🚀 Zuup/Visionblox Applications</h3>
+                <div class="platform-grid">
+                    <div class="platform">
+                        <strong>Orb™</strong><br>
+                        Autodiff for 3D Gaussian Splatting optimization. Gradients through rendering for splat position/scale/color.
+                    </div>
+                    <div class="platform">
+                        <strong>Veyra™</strong><br>
+                        Policy gradients for reinforcement learning. Computational graphs for advantage estimation.
+                    </div>
+                    <div class="platform">
+                        <strong>Aureon™</strong><br>
+                        Gradient-based fine-tuning of embedding models. Interpretable gradients for procurement scoring explanations.
+                    </div>
+                    <div class="platform">
+                        <strong>Symbion™</strong><br>
+                        Backprop through biosignal processing networks. Gradients for adaptive filtering parameters.
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="checklist">
+                <li>Variable class with gradient storage</li>
+                <li>Tape/graph for operation recording</li>
+                <li>Topological sort implementation</li>
+                <li>Gradient accumulation for fan-out nodes</li>
+                <li>Train XOR MLP as validation (100% accuracy)</li>
+                <li>Gradient test: compare vs finite differences (1e-5 tolerance)</li>
+            </ul>
+        </section>
+
+        <!-- PHASE 4 -->
+        <section class="phase" id="phase4">
+            <div class="phase-header">
+                <h2>Phase 4: Performance Engineering</h2>
+                <span class="level-badge grad">Grad/PhD Level</span>
+            </div>
+            
+            <p>Optimize for modern hardware: SIMD vectorization, cache-aware algorithms, multithreading.</p>
+            
+            <div class="techniques">
+                <div class="technique">
+                    <h4>SIMD Intrinsics (AVX2/NEON)</h4>
+                    <p>Process 8 floats per instruction with <code>_mm256_fmadd_ps</code>. Explicit vectorization, not compiler auto-vec.</p>
+                </div>
+                <div class="technique">
+                    <h4>Cache-Aware Blocking</h4>
+                    <p>Tile matrix operations to fit L1/L2 cache. 64KB tiles for matmul, loop reordering (ikj vs ijk).</p>
+                </div>
+                <div class="technique">
+                    <h4>Custom Allocators</h4>
+                    <p>Arena/pool allocators for graph nodes. Aligned allocation (<code>alignas(64)</code>) for cache line efficiency.</p>
+                </div>
+                <div class="technique">
+                    <h4>Multithreading</h4>
+                    <p><code>std::jthread</code>, work-stealing queues, thread pools. OpenMP for simple parallelism.</p>
+                </div>
+                <div class="technique">
+                    <h4>Profiling & Benchmarking</h4>
+                    <p><code>perf</code>, <code>cachegrind</code>, Google Benchmark. Measure before optimizing.</p>
+                </div>
+                <div class="technique">
+                    <h4>Branch Prediction Hints</h4>
+                    <p><code>[[likely]]</code>, <code>[[unlikely]]</code> attributes. PGO (Profile-Guided Optimization) for hot paths.</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<code><span class="comment">// AVX2 vectorized addition</span>
+<span class="keyword">void</span> <span class="function">add_avx2</span>(<span class="type">float</span>* out, <span class="keyword">const</span> <span class="type">float</span>* a, <span class="keyword">const</span> <span class="type">float</span>* b, <span class="type">size_t</span> n) {
+    <span class="type">size_t</span> i = 0;
+    <span class="keyword">for</span> (; i + 8 <= n; i += 8) {
+        <span class="type">__m256</span> va = <span class="function">_mm256_load_ps</span>(a + i);
+        <span class="type">__m256</span> vb = <span class="function">_mm256_load_ps</span>(b + i);
+        <span class="type">__m256</span> vc = <span class="function">_mm256_add_ps</span>(va, vb);
+        <span class="function">_mm256_store_ps</span>(out + i, vc);
+    }
+    <span class="keyword">for</span> (; i < n; ++i) out[i] = a[i] + b[i];  <span class="comment">// remainder</span>
+}</code>
+            </div>
+            
+            <div class="zuup-applications">
+                <h3>🚀 Zuup/Visionblox Applications</h3>
+                <div class="platform-grid">
+                    <div class="platform">
+                        <strong>Orb™</strong><br>
+                        SIMD for 3DGS rasterization. Cache-blocked splat sorting. Parallel tile rendering.
+                    </div>
+                    <div class="platform">
+                        <strong>PodX™</strong><br>
+                        Power-efficient SIMD on ARM NEON. Memory pooling for constrained edge hardware.
+                    </div>
+                    <div class="platform">
+                        <strong>Symbion™</strong><br>
+                        Real-time signal processing with SIMD FFT. Lock-free queues for sensor data ingestion.
+                    </div>
+                    <div class="platform">
+                        <strong>Veyra™</strong><br>
+                        Parallel environment rollouts. Vectorized reward computation across batch.
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="checklist">
+                <li>AVX2/NEON intrinsics for element-wise ops</li>
+                <li>Blocked matmul with cache-aware tiling</li>
+                <li>Thread pool for parallel operations</li>
+                <li>Custom arena allocator for graph nodes</li>
+                <li>Benchmark: 10x speedup vs naive matmul</li>
+            </ul>
+        </section>
+
+        <!-- PHASE 5 -->
+        <section class="phase" id="phase5">
+            <div class="phase-header">
+                <h2>Phase 5: Extensions</h2>
+                <span class="level-badge phd">PhD Level (Novel)</span>
+            </div>
+            
+            <p>Choose a specialization for depth. Each option is publishable if executed well.</p>
+            
+            <div class="techniques">
+                <div class="technique">
+                    <h4>Option A: CUDA Backend</h4>
+                    <p>GPU kernels, memory coalescing, shared memory, warp-level primitives. cuBLAS/cuDNN integration.</p>
+                </div>
+                <div class="technique">
+                    <h4>Option B: Sparse Tensors</h4>
+                    <p>CSR/COO formats, sparse-dense matmul, gradient sparsity exploitation. Graph neural network applications.</p>
+                </div>
+                <div class="technique">
+                    <h4>Option C: Quantization</h4>
+                    <p>INT8/FP16 inference, calibration strategies, quantization-aware training. Edge deployment focus.</p>
+                </div>
+                <div class="technique">
+                    <h4>Option D: Graph Optimization</h4>
+                    <p>Operator fusion, constant folding, dead code elimination. JIT compilation with LLVM.</p>
+                </div>
+            </div>
+            
+            <div class="zuup-applications">
+                <h3>🚀 Zuup/Visionblox Applications</h3>
+                <div class="platform-grid">
+                    <div class="platform">
+                        <strong>Orb™ (CUDA)</strong><br>
+                        GPU 3DGS rendering at 100+ FPS. Custom CUDA kernels for splat rasterization.
+                    </div>
+                    <div class="platform">
+                        <strong>QAWM™ (Sparse)</strong><br>
+                        Sparse temporal attention for archaeological reconstruction. Graph-based lineage modeling.
+                    </div>
+                    <div class="platform">
+                        <strong>PodX™ (Quantization)</strong><br>
+                        INT8 inference on edge TPU. 4-bit weights for memory-constrained deployment.
+                    </div>
+                    <div class="platform">
+                        <strong>Veyra™ (Graph Opt)</strong><br>
+                        JIT-compiled policy networks. Fused attention + MLP kernels for low-latency inference.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SUMMARY TABLE -->
+        <section id="summary">
+            <h2 style="margin-bottom: 1rem;">Summary: Techniques by Level</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Core Techniques</th>
+                        <th>Verification Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="level-badge undergrad">Undergrad</span></td>
+                        <td>RAII, Rule of Five, Move Semantics, Basic Templates, Operator Overloading, CMake</td>
+                        <td>Unit tests, Valgrind/ASan clean</td>
+                    </tr>
+                    <tr>
+                        <td><span class="level-badge grad">Graduate</span></td>
+                        <td>CRTP, Expression Templates, SFINAE/Concepts, Perfect Forwarding, constexpr</td>
+                        <td>Assembly inspection (no intermediates), benchmark comparisons</td>
+                    </tr>
+                    <tr>
+                        <td><span class="level-badge phd">PhD</span></td>
+                        <td>Computational Graphs, Reverse-Mode AD, SIMD Intrinsics, Custom Allocators, GPU Kernels</td>
+                        <td>Gradient tests vs finite diff, train real models, benchmark vs Eigen/PyTorch</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="background: var(--secondary); padding: 1.5rem; border-radius: 12px; margin-top: 2rem;">
+                <h3 style="color: var(--warning); margin-bottom: 1rem;">📚 Quick Reference: Zuup Platform Applications</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Primary Technique Applications</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Aureon™</strong></td>
+                            <td>RAII for DB connections, Move semantics for embeddings, Gradients for explainable scoring</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Symbion™</strong></td>
+                            <td>Zero-copy views, Real-time SIMD processing, Lock-free queues for biosignals</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Orb™</strong></td>
+                            <td>Expression templates for 3DGS, CUDA rendering, Autodiff for optimization</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Veyra™</strong></td>
+                            <td>Policy gradients, CRTP for type-safe RL abstractions, Graph optimization for inference</td>
+                        </tr>
+                        <tr>
+                            <td><strong>QAWM™</strong></td>
+                            <td>Sparse tensors for temporal attention, Bayesian autodiff, Uncertainty quantification</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PodX™</strong></td>
+                            <td>ARM NEON SIMD, Quantized inference, Memory pooling for constrained hardware</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Civium™</strong></td>
+                            <td>Concepts for type-safe compliance rules, SFINAE for jurisdiction dispatch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <footer style="text-align: center; padding: 3rem 0; color: var(--muted); border-top: 1px solid var(--accent); margin-top: 3rem;">
+            <p>MicroGrad++ Learning Documentation | Zuup Innovation Lab</p>
+            <p style="font-size: 0.85rem;">Zero-budget PhD-level C++ education for AI systems engineering</p>
+        </footer>
+    </div>
+</body>
+</html>
