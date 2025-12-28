@@ -1,0 +1,5 @@
+if(EXISTS "C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/test_tensor[1]_tests.cmake")
+  include("C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/test_tensor[1]_tests.cmake")
+else()
+  add_test(test_tensor_NOT_BUILT test_tensor_NOT_BUILT)
+endif()
