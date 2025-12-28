@@ -165,16 +165,6 @@ if(BUILD_TESTING)
 endif()
 
 # ============================================================================
-# Examples
-# ============================================================================
-option(BUILD_EXAMPLES "Build examples" ON)
-
-if(BUILD_EXAMPLES)
-    add_executable(xor_mlp examples/xor_mlp.cpp)
-    target_link_libraries(xor_mlp PRIVATE micrograd)
-endif()
-
-# ============================================================================
 # Install (for use as subproject)
 # ============================================================================
 install(DIRECTORY src/ DESTINATION include/micrograd

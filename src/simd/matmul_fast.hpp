@@ -207,33 +207,41 @@ inline void matmul_fast(
     constexpr size_t BK = MATMUL_BLOCK_K;
     constexpr size_t BN = MATMUL_BLOCK_N;
     
+    // Convert to signed for OpenMP compatibility (MSVC requires signed loop vars)
+    const ptrdiff_t sM = static_cast<ptrdiff_t>(M);
+    const ptrdiff_t sN = static_cast<ptrdiff_t>(N);
+    const ptrdiff_t sBM = static_cast<ptrdiff_t>(BM);
+    const ptrdiff_t sBN = static_cast<ptrdiff_t>(BN);
+    
 #ifdef MICROGRAD_OPENMP
-    #pragma omp parallel for collapse(2) schedule(dynamic)
+    #pragma omp parallel for schedule(dynamic)
 #endif
-    for (size_t ii = 0; ii < M; ii += BM) {
-        for (size_t jj = 0; jj < N; jj += BN) {
+    for (ptrdiff_t ii = 0; ii < sM; ii += sBM) {
+        for (ptrdiff_t jj = 0; jj < sN; jj += sBN) {
+            const size_t uii = static_cast<size_t>(ii);
+            const size_t ujj = static_cast<size_t>(jj);
             
             // Local accumulator for this block (better cache locality)
             alignas(32) float local_c[BM * BN] = {0};
             
-            size_t i_end = std::min(ii + BM, M);
-            size_t j_end = std::min(jj + BN, N);
-            size_t block_m = i_end - ii;
-            size_t block_n = j_end - jj;
+            size_t i_end = std::min(uii + BM, M);
+            size_t j_end = std::min(ujj + BN, N);
+            size_t block_m = i_end - uii;
+            size_t block_n = j_end - ujj;
             
             for (size_t kk = 0; kk < K; kk += BK) {
                 size_t k_end = std::min(kk + BK, K);
                 
                 for (size_t i = 0; i < block_m; ++i) {
                     for (size_t k = kk; k < k_end; ++k) {
-                        float a_ik = A[(ii + i) * K + k];
+                        float a_ik = A[(uii + i) * K + k];
                         
 #ifdef MICROGRAD_AVX2
                         __m256 va = _mm256_set1_ps(a_ik);
                         size_t j = 0;
                         
                         for (; j + 8 <= block_n; j += 8) {
-                            __m256 vb = _mm256_loadu_ps(&B[k * N + jj + j]);
+                            __m256 vb = _mm256_loadu_ps(&B[k * N + ujj + j]);
                             __m256 vc = _mm256_loadu_ps(&local_c[i * BN + j]);
                             #ifdef __FMA__
                                 vc = _mm256_fmadd_ps(va, vb, vc);
@@ -244,11 +252,11 @@ inline void matmul_fast(
                         }
                         
                         for (; j < block_n; ++j) {
-                            local_c[i * BN + j] += a_ik * B[k * N + jj + j];
+                            local_c[i * BN + j] += a_ik * B[k * N + ujj + j];
                         }
 #else
                         for (size_t j = 0; j < block_n; ++j) {
-                            local_c[i * BN + j] += a_ik * B[k * N + jj + j];
+                            local_c[i * BN + j] += a_ik * B[k * N + ujj + j];
                         }
 #endif
                     }
@@ -258,7 +266,7 @@ inline void matmul_fast(
             // Write back to C
             for (size_t i = 0; i < block_m; ++i) {
                 for (size_t j = 0; j < block_n; ++j) {
-                    C[(ii + i) * N + jj + j] = local_c[i * BN + j];
+                    C[(uii + i) * N + ujj + j] = local_c[i * BN + j];
                 }
             }
         }

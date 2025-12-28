@@ -1,0 +1,6 @@
+C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/CMakeFiles/bench_expr.dir
+C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/CMakeFiles/bench_simd.dir
+C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/CMakeFiles/xor_mlp.dir
+C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/CMakeFiles/INSTALL.dir
+C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/CMakeFiles/ZERO_CHECK.dir

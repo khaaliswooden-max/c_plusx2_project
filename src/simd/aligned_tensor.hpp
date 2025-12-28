@@ -15,6 +15,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>
+#include <random>
 
 namespace micrograd {
 namespace simd {
