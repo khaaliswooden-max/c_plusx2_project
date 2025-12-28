@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\343c61dd2db65387911fc79cd7032e3e\googletest-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\343c61dd2db65387911fc79cd7032e3e\googletest-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\343c61dd2db65387911fc79cd7032e3e\googletest-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\343c61dd2db65387911fc79cd7032e3e\googletest-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\343c61dd2db65387911fc79cd7032e3e\googletest-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\343c61dd2db65387911fc79cd7032e3e\googletest-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\343c61dd2db65387911fc79cd7032e3e\googletest-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\343c61dd2db65387911fc79cd7032e3e\googletest-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\fb15b0a80670c11d774a388750d19f9a\googletest-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\1d63f658f8a94250e557a67044920c91\googletest-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Admin\OneDrive - Visionblox\Documents\GitHub\c_plusx2_project\build\_deps\googletest-subbuild\CMakeFiles\googletest-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{996050BA-C3C3-352C-8C5D-BB9289C1F74F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

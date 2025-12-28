@@ -1,0 +1,10 @@
+^C:\USERS\ADMIN\ONEDRIVE - VISIONBLOX\DOCUMENTS\GITHUB\C_PLUSX2_PROJECT\BUILD\_DEPS\GOOGLETEST-SUBBUILD\CMAKEFILES\1D63F658F8A94250E557A67044920C91\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/_deps/googletest-subbuild" "-BC:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/_deps/googletest-subbuild" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/Admin/OneDrive - Visionblox/Documents/GitHub/c_plusx2_project/build/_deps/googletest-subbuild/googletest-populate.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
