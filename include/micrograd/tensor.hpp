@@ -28,6 +28,7 @@ public:
     explicit Shape(Dims dims) : dims_(std::move(dims)) {}
 
     [[nodiscard]] size_t rank() const noexcept { return dims_.size(); }
+    [[nodiscard]] size_t ndim() const noexcept { return dims_.size(); }
     [[nodiscard]] size_t operator[](size_t i) const { return dims_.at(i); }
     
     [[nodiscard]] size_t numel() const noexcept {
@@ -132,6 +133,7 @@ public:
     [[nodiscard]] size_t size() const noexcept { return shape_.numel(); }
     [[nodiscard]] const Shape& shape() const noexcept { return shape_; }
     [[nodiscard]] size_t rank() const noexcept { return shape_.rank(); }
+    [[nodiscard]] size_t ndim() const noexcept { return shape_.ndim(); }
     [[nodiscard]] bool empty() const noexcept { return size() == 0; }
     
     // Raw pointer access
@@ -166,6 +168,19 @@ public:
         return data_[flat_index(indices)];
     }
 
+    // 2D indexing via operator() for convenience (row-major)
+    [[nodiscard]] T& operator()(size_t i, size_t j) {
+        assert(shape_.rank() == 2 && "operator(i,j) requires 2D tensor");
+        assert(i < shape_[0] && j < shape_[1] && "Index out of bounds");
+        return data_[i * shape_[1] + j];
+    }
+
+    [[nodiscard]] const T& operator()(size_t i, size_t j) const {
+        assert(shape_.rank() == 2 && "operator(i,j) requires 2D tensor");
+        assert(i < shape_[0] && j < shape_[1] && "Index out of bounds");
+        return data_[i * shape_[1] + j];
+    }
+
     // -------------------------------------------------------------------------
     // Modifiers
     // -------------------------------------------------------------------------
@@ -177,6 +192,26 @@ public:
     void zero() { fill(T{0}); }
 
     // -------------------------------------------------------------------------
+    // Reductions
+    // -------------------------------------------------------------------------
+
+    [[nodiscard]] T sum() const {
+        return std::accumulate(begin(), end(), T{0});
+    }
+
+    [[nodiscard]] T mean() const {
+        return sum() / static_cast<T>(size());
+    }
+
+    [[nodiscard]] T max() const {
+        return *std::max_element(begin(), end());
+    }
+
+    [[nodiscard]] T min() const {
+        return *std::min_element(begin(), end());
+    }
+
+    // -------------------------------------------------------------------------
     // Factory Methods
     // -------------------------------------------------------------------------
     
@@ -186,6 +221,19 @@ public:
 
     [[nodiscard]] static Tensor ones(Shape shape) {
         return Tensor(std::move(shape), T{1});
+    }
+
+    [[nodiscard]] static Tensor from_list(std::initializer_list<T> values) {
+        Tensor t(Shape({values.size()}));
+        std::copy(values.begin(), values.end(), t.data());
+        return t;
+    }
+
+    [[nodiscard]] static Tensor from_list(std::initializer_list<T> values, Shape shape) {
+        assert(values.size() == shape.numel() && "Size mismatch");
+        Tensor t(std::move(shape));
+        std::copy(values.begin(), values.end(), t.data());
+        return t;
     }
 
     // -------------------------------------------------------------------------
@@ -301,3 +349,4 @@ std::ostream& operator<<(std::ostream& os, const Tensor<T>& t) {
 }
 
 } // namespace micrograd
+

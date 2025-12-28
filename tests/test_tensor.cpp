@@ -179,6 +179,17 @@ TEST(tensor_multidim_access) {
     assert(approx_equal(t[4], 3.0f));  // (1,1)
 }
 
+TEST(tensor_2d_indexing) {
+    Tensor<float> t({2, 3});
+    t(0, 0) = 1.0f;
+    t(0, 2) = 2.0f;
+    t(1, 1) = 3.0f;
+    
+    assert(approx_equal(t(0, 0), 1.0f));
+    assert(approx_equal(t(0, 2), 2.0f));
+    assert(approx_equal(t(1, 1), 3.0f));
+}
+
 TEST(tensor_iteration) {
     Tensor<float> t({2, 2}, 1.0f);
     float sum = 0.0f;
@@ -271,6 +282,32 @@ TEST(tensor_chained_ops) {
 }
 
 // =============================================================================
+// Reduction Tests
+// =============================================================================
+
+TEST(tensor_sum) {
+    auto t = Tensor<float>::ones({3, 3});
+    assert(approx_equal(t.sum(), 9.0f));
+}
+
+TEST(tensor_mean) {
+    Tensor<float> t({2, 2});
+    t[0] = 1.0f; t[1] = 2.0f; t[2] = 3.0f; t[3] = 4.0f;
+    assert(approx_equal(t.mean(), 2.5f));
+}
+
+// =============================================================================
+// Factory Method Tests
+// =============================================================================
+
+TEST(tensor_from_list) {
+    auto t = Tensor<float>::from_list({1.0f, 2.0f, 3.0f, 4.0f});
+    assert(t.size() == 4);
+    assert(approx_equal(t[0], 1.0f));
+    assert(approx_equal(t[3], 4.0f));
+}
+
+// =============================================================================
 // Edge Cases
 // =============================================================================
 
@@ -326,6 +363,7 @@ int main() {
     // Access tests
     RUN_TEST(tensor_indexing);
     RUN_TEST(tensor_multidim_access);
+    RUN_TEST(tensor_2d_indexing);
     RUN_TEST(tensor_iteration);
     
     // Operation tests
@@ -337,6 +375,13 @@ int main() {
     RUN_TEST(tensor_scalar_mul);
     RUN_TEST(tensor_chained_ops);
     
+    // Reduction tests
+    RUN_TEST(tensor_sum);
+    RUN_TEST(tensor_mean);
+    
+    // Factory tests
+    RUN_TEST(tensor_from_list);
+    
     // Edge cases
     RUN_TEST(tensor_single_element);
     RUN_TEST(tensor_large);
@@ -345,3 +390,4 @@ int main() {
     std::cout << "\n=== All Phase 1 tests PASSED ===" << std::endl;
     return 0;
 }
+

@@ -9,130 +9,6 @@
 namespace micrograd {
 
 // =============================================================================
-// Binary element-wise operations
-// =============================================================================
-
-/// Element-wise addition
-template<typename T>
-[[nodiscard]] Tensor<T> operator+(const Tensor<T>& a, const Tensor<T>& b) {
-    assert(a.shape() == b.shape() && "Shapes must match for addition");
-    
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = a[i] + b[i];
-    }
-    return result;
-}
-
-/// Element-wise subtraction
-template<typename T>
-[[nodiscard]] Tensor<T> operator-(const Tensor<T>& a, const Tensor<T>& b) {
-    assert(a.shape() == b.shape() && "Shapes must match for subtraction");
-    
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = a[i] - b[i];
-    }
-    return result;
-}
-
-/// Element-wise multiplication (Hadamard product)
-template<typename T>
-[[nodiscard]] Tensor<T> operator*(const Tensor<T>& a, const Tensor<T>& b) {
-    assert(a.shape() == b.shape() && "Shapes must match for multiplication");
-    
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = a[i] * b[i];
-    }
-    return result;
-}
-
-/// Element-wise division
-template<typename T>
-[[nodiscard]] Tensor<T> operator/(const Tensor<T>& a, const Tensor<T>& b) {
-    assert(a.shape() == b.shape() && "Shapes must match for division");
-    
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = a[i] / b[i];
-    }
-    return result;
-}
-
-// =============================================================================
-// Scalar operations
-// =============================================================================
-
-/// Tensor + scalar
-template<typename T>
-[[nodiscard]] Tensor<T> operator+(const Tensor<T>& a, T scalar) {
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = a[i] + scalar;
-    }
-    return result;
-}
-
-template<typename T>
-[[nodiscard]] Tensor<T> operator+(T scalar, const Tensor<T>& a) {
-    return a + scalar;
-}
-
-/// Tensor - scalar
-template<typename T>
-[[nodiscard]] Tensor<T> operator-(const Tensor<T>& a, T scalar) {
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = a[i] - scalar;
-    }
-    return result;
-}
-
-template<typename T>
-[[nodiscard]] Tensor<T> operator-(T scalar, const Tensor<T>& a) {
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = scalar - a[i];
-    }
-    return result;
-}
-
-/// Tensor * scalar
-template<typename T>
-[[nodiscard]] Tensor<T> operator*(const Tensor<T>& a, T scalar) {
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = a[i] * scalar;
-    }
-    return result;
-}
-
-template<typename T>
-[[nodiscard]] Tensor<T> operator*(T scalar, const Tensor<T>& a) {
-    return a * scalar;
-}
-
-/// Tensor / scalar
-template<typename T>
-[[nodiscard]] Tensor<T> operator/(const Tensor<T>& a, T scalar) {
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = a[i] / scalar;
-    }
-    return result;
-}
-
-template<typename T>
-[[nodiscard]] Tensor<T> operator/(T scalar, const Tensor<T>& a) {
-    Tensor<T> result(a.shape());
-    for (size_t i = 0; i < a.size(); ++i) {
-        result[i] = scalar / a[i];
-    }
-    return result;
-}
-
-// =============================================================================
 // Unary operations
 // =============================================================================
 
@@ -226,6 +102,58 @@ template<typename T>
     Tensor<T> result(a.shape());
     for (size_t i = 0; i < a.size(); ++i) {
         result[i] = std::tanh(a[i]);
+    }
+    return result;
+}
+
+// =============================================================================
+// Additional scalar operations (commutative versions)
+// =============================================================================
+
+template<typename T>
+[[nodiscard]] Tensor<T> operator+(T scalar, const Tensor<T>& a) {
+    return a + scalar;
+}
+
+/// Tensor - scalar
+template<typename T>
+[[nodiscard]] Tensor<T> operator-(const Tensor<T>& a, T scalar) {
+    Tensor<T> result(a.shape());
+    for (size_t i = 0; i < a.size(); ++i) {
+        result[i] = a[i] - scalar;
+    }
+    return result;
+}
+
+template<typename T>
+[[nodiscard]] Tensor<T> operator-(T scalar, const Tensor<T>& a) {
+    Tensor<T> result(a.shape());
+    for (size_t i = 0; i < a.size(); ++i) {
+        result[i] = scalar - a[i];
+    }
+    return result;
+}
+
+template<typename T>
+[[nodiscard]] Tensor<T> operator*(T scalar, const Tensor<T>& a) {
+    return a * scalar;
+}
+
+/// Tensor / scalar
+template<typename T>
+[[nodiscard]] Tensor<T> operator/(const Tensor<T>& a, T scalar) {
+    Tensor<T> result(a.shape());
+    for (size_t i = 0; i < a.size(); ++i) {
+        result[i] = a[i] / scalar;
+    }
+    return result;
+}
+
+template<typename T>
+[[nodiscard]] Tensor<T> operator/(T scalar, const Tensor<T>& a) {
+    Tensor<T> result(a.shape());
+    for (size_t i = 0; i < a.size(); ++i) {
+        result[i] = scalar / a[i];
     }
     return result;
 }
@@ -364,3 +292,4 @@ template<typename T>
 }
 
 } // namespace micrograd
+

@@ -4,7 +4,6 @@
 // Umbrella header: includes all public API components
 #pragma once
 
-#include "shape.hpp"
 #include "tensor.hpp"
 #include "ops.hpp"
 
@@ -28,3 +27,4 @@ inline constexpr struct {
 } version;
 
 } // namespace micrograd
+
